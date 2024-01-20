@@ -95,15 +95,18 @@ export class ShellElement extends LitElement {
 
     ws.onmessage = event => {
       let data;
-      if (['idle', 'washing'].includes(event.data)) {
-        data = capitalize(event.data);
+      console.log(event.data);
+      if (['idle', 'washing', 'outoforder'].includes(event.data)) {
+        data = formatText(event.data);
       } else {
         data = JSON.parse(event.data)[0]['_value'];
       }
       if (data === 'Idle') {
         this.doneMessage = 'Load is finished';
-      } else {
+      } else if (data === 'Washing') {
         this.doneMessage = 'Load is running';
+      } else if (data === 'Out of order') {
+        this.doneMessage = 'Machine is undergoing maintenance';
       }
       this.washerStatus = data;
       this.showImage = !this.showImage;
@@ -114,8 +117,12 @@ export class ShellElement extends LitElement {
         ws = new WebSocket(`ws://${host}:8000/ws/${clientId}`);
       }, 5000);
     };
-    function capitalize(word) {
-      return word[0].toUpperCase() + word.substr(1);
+    function formatText(text) {
+      if (text === 'outoforder') {
+        return 'Out of order';
+      } else {
+        return text.charAt(0).toUpperCase() + text.slice(1);
+      }
     }
     ws.onclose = event => {
       console.log('WebSocket closed with code: ', event.code);
