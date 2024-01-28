@@ -91,11 +91,24 @@ export class ShellElement extends LitElement {
 
     ws.onopen = () => {
       ws.send('Hello, server!');
+      console.log('websocket open');
+      setInterval(() => {
+        ws.send('ping');
+      }, 55000);
     };
 
     ws.onmessage = event => {
       let data;
-      console.log(event.data);
+      // Get the current date and time
+      let currentDateTime = new Date();
+
+      // Format the date and time
+      let date = currentDateTime.toDateString();
+      let time = currentDateTime.toLocaleTimeString();
+      console.log(date, time, event.data);
+      if (event.data === 'pong') {
+        return;
+      }
       if (['idle', 'washing', 'outoforder'].includes(event.data)) {
         data = formatText(event.data);
       } else {
