@@ -125,11 +125,6 @@ export class ShellElement extends LitElement {
       this.showImage = !this.showImage;
     };
 
-    let reconnect = () => {
-      setTimeout(() => {
-        ws = new WebSocket(`ws://${host}:8000/ws/${clientId}`);
-      }, 5000);
-    };
     function formatText(text) {
       if (text === 'outoforder') {
         return 'Out of order';
