@@ -133,8 +133,7 @@ export class ShellElement extends LitElement {
       }
     }
     ws.onclose = event => {
-      console.log('WebSocket closed with code: ', event.code);
-      reconnect();
+      console.log(Date.now(), 'WebSocket closed with code: ', event.code);
     };
   }
 
